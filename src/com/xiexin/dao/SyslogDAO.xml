@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiexin.dao.SyslogDAO">
+  <resultMap id="BaseResultMap" type="com.xiexin.bean.Syslog">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="USERID" jdbcType="VARCHAR" property="userid" />
+    <result column="MODULE" jdbcType="VARCHAR" property="module" />
+    <result column="METHOD" jdbcType="VARCHAR" property="method" />
+    <result column="RESPONSE_DATE" jdbcType="VARCHAR" property="responseDate" />
+    <result column="IP" jdbcType="VARCHAR" property="ip" />
+    <result column="DATES" jdbcType="VARCHAR" property="dates" />
+    <result column="COMMIT" jdbcType="VARCHAR" property="commit" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    ID, USERID, `MODULE`, `METHOD`, RESPONSE_DATE, IP, DATES, `COMMIT`
+  </sql>
+  <select id="selectByExample" parameterType="com.xiexin.bean.SyslogExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from syslog
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="limit != null">
+      <if test="offset != null">
+        limit ${offset}, ${limit}
+      </if>
+      <if test="offset == null">
+        limit ${limit}
+      </if>
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from syslog
+    where ID = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from syslog
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.xiexin.bean.SyslogExample">
+    delete from syslog
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.xiexin.bean.Syslog">
+    insert into syslog (ID, USERID, `MODULE`, 
+      `METHOD`, RESPONSE_DATE, IP, 
+      DATES, `COMMIT`)
+    values (#{id,jdbcType=INTEGER}, #{userid,jdbcType=VARCHAR}, #{module,jdbcType=VARCHAR}, 
+      #{method,jdbcType=VARCHAR}, #{responseDate,jdbcType=VARCHAR}, #{ip,jdbcType=VARCHAR}, 
+      #{dates,jdbcType=VARCHAR}, #{commit,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.xiexin.bean.Syslog">
+    insert into syslog
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="userid != null">
+        USERID,
+      </if>
+      <if test="module != null">
+        `MODULE`,
+      </if>
+      <if test="method != null">
+        `METHOD`,
+      </if>
+      <if test="responseDate != null">
+        RESPONSE_DATE,
+      </if>
+      <if test="ip != null">
+        IP,
+      </if>
+      <if test="dates != null">
+        DATES,
+      </if>
+      <if test="commit != null">
+        `COMMIT`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null">
+        #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="module != null">
+        #{module,jdbcType=VARCHAR},
+      </if>
+      <if test="method != null">
+        #{method,jdbcType=VARCHAR},
+      </if>
+      <if test="responseDate != null">
+        #{responseDate,jdbcType=VARCHAR},
+      </if>
+      <if test="ip != null">
+        #{ip,jdbcType=VARCHAR},
+      </if>
+      <if test="dates != null">
+        #{dates,jdbcType=VARCHAR},
+      </if>
+      <if test="commit != null">
+        #{commit,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.xiexin.bean.SyslogExample" resultType="java.lang.Long">
+    select count(*) from syslog
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update syslog
+    <set>
+      <if test="record.id != null">
+        ID = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.userid != null">
+        USERID = #{record.userid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.module != null">
+        `MODULE` = #{record.module,jdbcType=VARCHAR},
+      </if>
+      <if test="record.method != null">
+        `METHOD` = #{record.method,jdbcType=VARCHAR},
+      </if>
+      <if test="record.responseDate != null">
+        RESPONSE_DATE = #{record.responseDate,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ip != null">
+        IP = #{record.ip,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dates != null">
+        DATES = #{record.dates,jdbcType=VARCHAR},
+      </if>
+      <if test="record.commit != null">
+        `COMMIT` = #{record.commit,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update syslog
+    set ID = #{record.id,jdbcType=INTEGER},
+      USERID = #{record.userid,jdbcType=VARCHAR},
+      `MODULE` = #{record.module,jdbcType=VARCHAR},
+      `METHOD` = #{record.method,jdbcType=VARCHAR},
+      RESPONSE_DATE = #{record.responseDate,jdbcType=VARCHAR},
+      IP = #{record.ip,jdbcType=VARCHAR},
+      DATES = #{record.dates,jdbcType=VARCHAR},
+      `COMMIT` = #{record.commit,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xiexin.bean.Syslog">
+    update syslog
+    <set>
+      <if test="userid != null">
+        USERID = #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="module != null">
+        `MODULE` = #{module,jdbcType=VARCHAR},
+      </if>
+      <if test="method != null">
+        `METHOD` = #{method,jdbcType=VARCHAR},
+      </if>
+      <if test="responseDate != null">
+        RESPONSE_DATE = #{responseDate,jdbcType=VARCHAR},
+      </if>
+      <if test="ip != null">
+        IP = #{ip,jdbcType=VARCHAR},
+      </if>
+      <if test="dates != null">
+        DATES = #{dates,jdbcType=VARCHAR},
+      </if>
+      <if test="commit != null">
+        `COMMIT` = #{commit,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xiexin.bean.Syslog">
+    update syslog
+    set USERID = #{userid,jdbcType=VARCHAR},
+      `MODULE` = #{module,jdbcType=VARCHAR},
+      `METHOD` = #{method,jdbcType=VARCHAR},
+      RESPONSE_DATE = #{responseDate,jdbcType=VARCHAR},
+      IP = #{ip,jdbcType=VARCHAR},
+      DATES = #{dates,jdbcType=VARCHAR},
+      `COMMIT` = #{commit,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
