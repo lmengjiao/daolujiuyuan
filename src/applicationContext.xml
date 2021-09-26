@@ -107,7 +107,7 @@
         <constructor-arg name="password" value="${redis.password}"/>
         <constructor-arg name="database" value="${redis.default.db}" type="int"/>
     </bean>
--->
+
 
 
 
