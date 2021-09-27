@@ -3,17 +3,17 @@ package com.xiexin.controller;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.xiexin.bean.Customer;
+import com.xiexin.bean.CustomerDTO;
 import com.xiexin.bean.CustomerExample;
 import com.xiexin.service.CustomerService;
 import com.xiexin.util.ALiSMUtil;
+import com.xiexin.util.JwtToToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import redis.clients.jedis.JedisPool;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.text.DecimalFormat;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/customer")
@@ -67,8 +67,13 @@ private JedisPool jedisPool;
         //1.根据前端传来的手机号和验证码来和redis中数据做对比
         String redisCodeNum = jedisPool.getResource().get(phoneNumber); //redis中的验证码
         if(codeNum.equals(redisCodeNum)){
+            //登录成功 需要返回给顾客一个jwt 同时把这个iwt方法到redis中
+            JwtToToken jwtToToken = new JwtToToken();
+            CustomerDTO jwt = jwtToToken.createJwt(phoneNumber); //前后端分离没有session
+            //使用jwt比较容易轻松地做出单点登录 基于jwt+redis的单点登录
             codeMap.put("code",0);
             codeMap.put("msg","登陆成功");
+            codeMap.put("data",jwt);
             return codeMap;
         }else{
             codeMap.put("code",400);
@@ -92,6 +97,19 @@ private JedisPool jedisPool;
             codeMap.put("msg","登陆失败");
             return codeMap;
         }
+    }
+
+    @RequestMapping("/getMoney")
+    public Map getMoney(double gongSiLng,double gongSiLat,double customerLng,double customerLat){
+        double money=customerService.getMoney(gongSiLng,gongSiLat,customerLng,customerLat);
+        //money应该是两位数的小数
+        DecimalFormat df = new DecimalFormat("#.##");
+        String format=df.format(money);
+        Map codeMap=new HashMap();
+        codeMap.put("code",0);
+        codeMap.put("msg","请求成功");
+        codeMap.put("data",format);
+        return codeMap;
     }
 
 //增

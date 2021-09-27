@@ -30,4 +30,5 @@ public interface CustomerService {
 
     int updateByPrimaryKey(Customer record);
 
+    double getMoney(double gongSiLng, double gongSiLat, double customerLng, double customerLat);
 }

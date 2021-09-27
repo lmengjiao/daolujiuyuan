@@ -3,6 +3,7 @@ package com.xiexin.service;
 import com.xiexin.bean.Customer;
 import com.xiexin.bean.CustomerExample;
 import com.xiexin.dao.CustomerDAO;
+import com.xiexin.util.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -55,6 +56,19 @@ public class CustomerServiceImpl implements CustomerService{
 	public int updateByPrimaryKey(Customer record){
     	return customerDAO.updateByPrimaryKey(record);
     }
+
+	@Override
+	public double getMoney(double gongSiLng, double gongSiLat, double customerLng, double customerLat) {
+	//根据经纬度计算距离 单位米
+		double m = MapUtils.algorithm(gongSiLng, gongSiLat, customerLng, customerLat);
+		//计算人民币
+		m=m/100;
+		//起步价
+		if(m<10){
+			m=10;
+		}
+		return m;
+	}
 
 
 }
