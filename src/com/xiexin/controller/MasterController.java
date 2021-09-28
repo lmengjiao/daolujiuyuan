@@ -88,7 +88,7 @@ public Map deleteBatch(@RequestParam(value = "idList[]") List<Integer> idList) {
 
 // 查--未分页
     // 全查
-    @RequestMapping("/selectAll")
+    @RequestMapping("/selectAll")   //    /api/master/selectAll
     public Map selectAll(){
     List<Master> masters =  masterService.selectByExample(null);
         Map responseMap = new HashMap();

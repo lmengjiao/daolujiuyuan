@@ -30,8 +30,8 @@ private JedisPool jedisPool;
     public Map sendCodeNum(String phoneNumber){
         Map codeMap=new HashMap();
         //1.在发送验证码之前 随机创建6个随机数字的验证码
-        int randomNum = new Random().nextInt(999999); //如果i<100000 +
-        if(randomNum<100000){
+        int randomNum = new Random().nextInt(999999); //最大值999999
+        if(randomNum<100000){   //如果i<100000 +100000
             randomNum=randomNum+100000;
         }
         //查询存在不存在
@@ -71,6 +71,8 @@ private JedisPool jedisPool;
             JwtToToken jwtToToken = new JwtToToken();
             CustomerDTO jwt = jwtToToken.createJwt(phoneNumber); //前后端分离没有session
             //使用jwt比较容易轻松地做出单点登录 基于jwt+redis的单点登录
+            //把token存入到Redis
+            jedisPool.getResource().set(phoneNumber+"token",jwt.getAccessToken());
             codeMap.put("code",0);
             codeMap.put("msg","登陆成功");
             codeMap.put("data",jwt);

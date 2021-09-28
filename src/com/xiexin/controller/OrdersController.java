@@ -6,10 +6,7 @@ import com.xiexin.bean.Orders;
 import com.xiexin.bean.OrdersExample;
 import com.xiexin.service.OrdersService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -17,9 +14,16 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/orders")
+@CrossOrigin(origins = "*") //*是来自所有的域名请求 也可以细化 解决跨域
 public class OrdersController{
 @Autowired(required = false)
 private OrdersService ordersService;
+
+@RequestMapping("/addOrders")
+public Map addOrders(){
+    System.out.println("访问成功");
+    return null;
+}
 
 //增
 // 后端订单增加 -- 针对layui的 针对前端传 json序列化的
