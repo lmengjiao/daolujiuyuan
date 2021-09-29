@@ -178,4 +178,23 @@ public class Orders implements Serializable {
     public void setCost(String cost) {
         this.cost = cost;
     }
+
+    @Override
+    public String toString() {
+        return "Orders{" +
+                "id=" + id +
+                ", phone='" + phone + '\'' +
+                ", mid=" + mid +
+                ", lng='" + lng + '\'' +
+                ", lat='" + lat + '\'' +
+                ", createtime=" + createtime +
+                ", updtetime=" + updtetime +
+                ", endtime=" + endtime +
+                ", contents='" + contents + '\'' +
+                ", status='" + status + '\'' +
+                ", address='" + address + '\'' +
+                ", attached='" + attached + '\'' +
+                ", cost='" + cost + '\'' +
+                '}';
+    }
 }

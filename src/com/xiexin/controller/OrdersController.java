@@ -7,7 +7,10 @@ import com.xiexin.bean.OrdersExample;
 import com.xiexin.service.OrdersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import redis.clients.jedis.JedisPool;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,28 +21,52 @@ import java.util.Map;
 public class OrdersController{
 @Autowired(required = false)
 private OrdersService ordersService;
+@Autowired
+    private JedisPool jedisPool;
 
 @RequestMapping("/addOrders")
-public Map addOrders(){
+public Map addOrders(HttpServletRequest request,Orders orders){
+    Map codeMap=new HashMap();
     System.out.println("访问成功");
-    return null;
+    System.out.println("orders = " + orders);
+    String phoneNumber = (String) request.getAttribute("phoneNumber");
+    System.out.println("phoneNumber = " + phoneNumber);
+    orders.setPhone(phoneNumber);
+    orders.setCreatetime(new Date());
+    orders.setStatus("已接单");
+    int i = ordersService.insertSelective(orders);
+    if(i==1){
+        codeMap.put("code",0);
+        codeMap.put("msg","您的提交已经收到 请安心等待 我们讲电话联系您");
+        return codeMap;
+        //当顾客点多次提交 学名叫做Ajax重复提交
+        //第一次提交完毕 将提交按钮变为不可点击状态 提交2字变为已提交订单 请稍等 （前端）
+        //n次提交（防黑客 点击速度比较快） 返回亲 我知道您很急 订单已经接收了 稍等（后端）
+        //思路 先查询该手机号有没有订单状态在redis 有了就返回给前端  没有就返回新增
+    }else{
+        codeMap.put("code",40001);
+        codeMap.put("msg","由于网络故障，未能添加成功，请再次提交");
+        return codeMap;
+    }
 }
 
 //增
 // 后端订单增加 -- 针对layui的 针对前端传 json序列化的
 @RequestMapping("/insert")
-public Map insert(@RequestBody Orders orders){ // orders 对象传参, 规则: 前端属性要和后台的属性一致!!!
-Map map = new HashMap();
-int i =  ordersService.insertSelective(orders);
-if(i>0){
-map.put("code",200);
-map.put("msg","添加成功");
-return map;
-}else{
-map.put("code",400);
-map.put("msg","添加失败,检查网络再来一次");
-return map;
-}
+public Map insert(@RequestBody Orders orders) { // orders 对象传参, 规则: 前端属性要和后台的属性一致!!!
+    Map map = new HashMap();
+    Boolean phoneNumber = jedisPool.getResource().exists("phoneNumber");
+        int i = ordersService.insertSelective(orders);
+        if (i > 0) {
+            map.put("code", 200);
+            map.put("msg", "添加成功");
+            return map;
+        } else {
+            map.put("code", 400);
+            map.put("msg", "添加失败,检查网络再来一次");
+            return map;
+        }
+
 }
 
 

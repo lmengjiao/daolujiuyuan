@@ -45,9 +45,9 @@ private JedisPool jedisPool;
             ALiSMUtil.sendMsg(phoneNumber, randomNum);
             //3.发送之后 手机号当做redis key 验证码当做redis value 存入到数据库中
             String setex = jedisPool.getResource().setex(phoneNumber, 120, String.valueOf(randomNum));
-            jedisPool.getResource().persist(phoneNumber); //注意这里设置成-1 在线上环境要删除
+            jedisPool.getResource().persist(phoneNumber); //注意这里设置成-1 在线上环境要删除（取消过期时间）
             //4.将验证码发送到前端
-            if ("OK".equals(setex)) {
+            if ("OK".equals(setex)) { //setex的返回值是OK
                 codeMap.put("code", 0);
                 codeMap.put("msg", "发送成功");
                 // codeMap.put("data",randomNum); 线上不能通过json数据把验证码返回到前端 容易被人恶意利用 验证码只能该手机号可以看到
@@ -67,7 +67,8 @@ private JedisPool jedisPool;
         //1.根据前端传来的手机号和验证码来和redis中数据做对比
         String redisCodeNum = jedisPool.getResource().get(phoneNumber); //redis中的验证码
         if(codeNum.equals(redisCodeNum)){
-            //登录成功 需要返回给顾客一个jwt 同时把这个iwt方法到redis中
+            //登录成功 需要返回给顾客一个jwt 同时把这个jwt方法到redis中
+            //jwt就是json web token 实际就是一个字符串
             JwtToToken jwtToToken = new JwtToToken();
             CustomerDTO jwt = jwtToToken.createJwt(phoneNumber); //前后端分离没有session
             //使用jwt比较容易轻松地做出单点登录 基于jwt+redis的单点登录

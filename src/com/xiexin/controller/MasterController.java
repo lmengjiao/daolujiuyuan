@@ -6,10 +6,7 @@ import com.xiexin.bean.Master;
 import com.xiexin.bean.MasterExample;
 import com.xiexin.service.MasterService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -20,6 +17,8 @@ import java.util.Map;
 public class MasterController{
 @Autowired(required = false)
 private MasterService masterService;
+
+
 
 //增
 // 后端订单增加 -- 针对layui的 针对前端传 json序列化的
@@ -88,7 +87,8 @@ public Map deleteBatch(@RequestParam(value = "idList[]") List<Integer> idList) {
 
 // 查--未分页
     // 全查
-    @RequestMapping("/selectAll")   //    /api/master/selectAll
+    @RequestMapping("/selectAll")//    /api/master/selectAll
+    @ResponseBody
     public Map selectAll(){
     List<Master> masters =  masterService.selectByExample(null);
         Map responseMap = new HashMap();
